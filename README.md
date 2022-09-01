@@ -1,2 +1,2 @@
-# book-online-web-scraping
+# books-online-web-scraping
 Extract prices from Books to Scrape
