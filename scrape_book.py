@@ -121,6 +121,7 @@ def scrape_category(url, category):
         writer = csv.writer(file, delimiter=',')
         writer.writerow(headers)
 
+    # call scrape_page() for each book in the category
     for book_url in get_books_urls(url, []):
         scrape_page(book_url, image_path, category_csv)
 
@@ -128,9 +129,11 @@ def scrape_category(url, category):
 def scrape_website():
     url = 'http://books.toscrape.com'
 
+    # get categories from the website
     def get_categories(root_url):
         page = requests.get(root_url)
         soup = BeautifulSoup(page.content, 'html.parser')
+        # stock category names and urls in a dictionary
         categories = {}
         for cat in soup.select('.side_categories ul ul li a'):
             key = cat.string.strip()
@@ -138,9 +141,12 @@ def scrape_website():
             categories[key] = value
         return categories
 
+    # call scrape_category() for each category in the website
     for cat_name, cat_url in get_categories(url).items():
         scrape_category(cat_url, cat_name)
+        # progression information
         print(cat_name + ' is done')
+    # progression information
     print("You're all set!")
 
 
