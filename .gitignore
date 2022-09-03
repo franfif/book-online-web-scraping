@@ -17,3 +17,6 @@ __pycache__/
 
 # csv files
 *.csv
+
+# folders
+books_toscrape/
