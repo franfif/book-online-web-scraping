@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
+import os
 import re
 import csv
 import helper_table as tab
@@ -67,9 +68,7 @@ def write_book_data(list_of_data, csvfile):
 
 
 # get links from a category and scrape each book of the category
-def scrape_category():
-    url = 'http://books.toscrape.com/catalogue/category/books/mystery_3/index.html'
-
+def scrape_category(url, category):
     # gather all books in category page, return list of urls
     def get_books_urls(page_url, books_urls):
         page = requests.get(page_url)
@@ -91,7 +90,27 @@ def scrape_category():
             return books_urls
 
     for book_url in get_books_urls(url, []):
-        scrape_page(book_url, 'data_category.csv')
+        scrape_page(book_url, category_csv)
 
 
-scrape_category()
+def scrape_website():
+    url = 'http://books.toscrape.com'
+
+    def get_categories(root_url):
+        page = requests.get(root_url)
+        soup = BeautifulSoup(page.content, 'html.parser')
+        # soup_categories = soup.select('.side_categories ul ul li a')
+        categories = {}
+        for cat in soup.select('.side_categories ul ul li a'):
+            key = cat.string.strip()
+            value = urljoin(root_url, cat.attrs.get('href'))
+            categories[key] = value
+        return categories
+
+    for cat_name, cat_url in get_categories(url).items():
+        scrape_category(cat_url, cat_name)
+        print(cat_name + ' is done')
+    print("You're all set!")
+
+
+scrape_website()
