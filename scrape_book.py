@@ -89,6 +89,30 @@ def scrape_category(url, category):
         else:
             return books_urls
 
+    # create headers for csv files
+    headers = [
+        'product_page_url',
+        'universal_product_code',
+        'title',
+        'price_including_tax',
+        'price_excluding_tax',
+        'number_available',
+        'product_description',
+        'category',
+        'review_rating',
+        'image_url'
+    ]
+    # create directory for website if it does not exist
+    path = 'books_toscrape/'
+    if not os.path.exists(path):
+        os.mkdir(path)
+    # create csv file for the category
+    category_csv = path + category + '.csv'
+    # add headers to category csv file
+    with open(category_csv, 'w', newline='') as file:
+        writer = csv.writer(file, delimiter=',')
+        writer.writerow(headers)
+
     for book_url in get_books_urls(url, []):
         scrape_page(book_url, category_csv)
 
