@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urljoin
 from urllib.request import urlretrieve
 import os
 import re
@@ -38,11 +38,8 @@ def scrape_page(url, image_path, csvfile):
     review_rating = soup.find(class_='star-rating').attrs.get('class')[1]
     review_rating = num.word_to_number(review_rating)
     # image_url
-    image_url = soup.img['src']
-    # prepare url to correct the image urls
-    parsed_url = urlparse(url)
-    root_url = parsed_url.scheme + '://' + parsed_url.netloc
-    image_url = image_url.replace('../..', root_url)
+    # change relative img src to absolute url
+    image_url = urljoin(url, soup.img['src'])
 
     # combine metadata in a list
     page_content = [
