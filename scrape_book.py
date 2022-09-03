@@ -62,7 +62,9 @@ def scrape_page(url, image_path, csvfile):
     write_book_data(page_content, csvfile)
 
     # download image
-    urlretrieve(image_url, image_path + slugify(title) + '.' + image_url.rsplit('.')[-1])
+    urlretrieve(image_url,
+                image_path + slugify(title)
+                + '.' + image_url.rsplit('.')[-1])
 
 
 # take a list of metadata and append it to a csv file
