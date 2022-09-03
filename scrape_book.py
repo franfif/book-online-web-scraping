@@ -1,14 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
+from urllib.request import urlretrieve
 import os
 import re
+from django.template.defaultfilters import slugify
 import csv
 import helper_table as tab
 import helper_number as num
 
 
-def scrape_page(url, csvfile):
+def scrape_page(url, image_path, csvfile):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -59,6 +61,9 @@ def scrape_page(url, csvfile):
     # write data in csv file
     write_book_data(page_content, csvfile)
 
+    # download image
+    urlretrieve(image_url, image_path + slugify(title) + '.' + image_url.rsplit('.')[-1])
+
 
 # take a list of metadata and append it to a csv file
 def write_book_data(list_of_data, csvfile):
@@ -108,13 +113,17 @@ def scrape_category(url, category):
         os.mkdir(path)
     # create csv file for the category
     category_csv = path + category + '.csv'
+    # create dir for images if it does not exist
+    image_path = 'books_toscrape/' + category + '_images/'
+    if not os.path.exists(image_path):
+        os.mkdir(image_path)
     # add headers to category csv file
     with open(category_csv, 'w', newline='') as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(headers)
 
     for book_url in get_books_urls(url, []):
-        scrape_page(book_url, category_csv)
+        scrape_page(book_url, image_path, category_csv)
 
 
 def scrape_website():
