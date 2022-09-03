@@ -25,7 +25,10 @@ def scrape_page(url, csvfile):
     text_available = tab.get_value_from_table(soup, 'Availability')
     number_available = re.findall('[0-9]+', text_available)[0]
     # product_description
-    product_description = soup.select('#product_description ~ p')[0].string
+    try:
+        product_description = soup.select('#product_description ~ p')[0].string
+    except:
+        product_description = "No Description"
     # category
     category = soup.select('.breadcrumb li a')[2].string
     # review_rating
