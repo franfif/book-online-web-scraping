@@ -15,8 +15,10 @@ __pycache__/
 #.idea folder from PyCharm
 .idea/
 
-# csv files
+# extracted files
 *.csv
+*.jpg
+*.png
 
 # folders
 books_toscrape/
