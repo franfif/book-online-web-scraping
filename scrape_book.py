@@ -107,11 +107,11 @@ def scrape_category(url, category):
         'image_url'
     ]
     # create directory for website if it does not exist
-    path = 'books_toscrape/'
-    if not os.path.exists(path):
-        os.mkdir(path)
+    cat_path = 'books_toscrape/'
+    if not os.path.exists(cat_path):
+        os.mkdir(cat_path)
     # create csv file for the category
-    category_csv = path + category + '.csv'
+    category_csv = cat_path + category + '.csv'
     # create dir for images if it does not exist
     image_path = 'books_toscrape/' + category + '_images/'
     if not os.path.exists(image_path):
