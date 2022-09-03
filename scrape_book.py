@@ -134,7 +134,6 @@ def scrape_website():
     def get_categories(root_url):
         page = requests.get(root_url)
         soup = BeautifulSoup(page.content, 'html.parser')
-        # soup_categories = soup.select('.side_categories ul ul li a')
         categories = {}
         for cat in soup.select('.side_categories ul ul li a'):
             key = cat.string.strip()
