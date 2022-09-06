@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from urllib.request import urlretrieve
 import os
 import re
-from django.template.defaultfilters import slugify
+from slugify import slugify
 import csv
 import helper_table as tab
 import helper_number as num
