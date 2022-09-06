@@ -11,6 +11,13 @@ import helper_number as num
 
 
 def scrape_page(url, image_path, csvfile):
+    """
+    Reads a product page, writes metadata into cvs and download images
+    :param url: str, url to a book page
+    :param image_path: str, relative path to place the images downloaded
+    :param csvfile: str, path and name of csv where metadata are written
+    :return: nothing
+    """
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -64,31 +71,51 @@ def scrape_page(url, image_path, csvfile):
     urlretrieve(image_url, image_path + image_file_name)
 
 
-# take a list of metadata and append it to a csv file
 def write_book_data(list_of_data, csvfile):
+    """
+    Takes a list of metadata and append it to a csv file
+    :param list_of_data: list, metadata of a product
+    :param csvfile: str, path and name of csv where data are written
+    :return: nothing
+    """
     with open(csvfile, 'a', newline='') as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(list_of_data)
 
 
-# get links from a category and scrape each book of the category
 def scrape_category(url, category):
-    # gather all books in category page, return list of urls
-    def get_books_urls(page_url, books_urls):
-        page = requests.get(page_url)
+    """
+    Gets links from a category and scrape each book of the category
+    :param url: str, url to a book category
+    :param category: str, name of the category
+    :return: nothing
+    """
+
+    def get_books_urls(category_url, books_urls):
+        """
+        Gathers all books in category page recursively, returns list of urls
+        :param category_url: str, url of the category
+        :param books_urls: list(str), accumulator of book urls
+        :return: list(str), list of book urls
+        """
+        page = requests.get(category_url)
         soup = BeautifulSoup(page.content, 'html.parser')
         new_books_urls = soup.select('.product_pod>div>a')
 
-        # extract href from soup selection and join them to page_url
         def join_url(book):
-            return urljoin(page_url, book.attrs.get('href'))
+            """
+            Extracts href from soup selection, returns absolute url using category_url
+            :param book: soup object, contains a relative url under href
+            :return: str, absolute url combining category_url and book url
+            """
+            return urljoin(category_url, book.attrs.get('href'))
 
         new_books_urls = list(map(join_url, new_books_urls))
         books_urls = books_urls + new_books_urls
         # check for next page and call get_books_urls recursively
         next_page = soup.select_one('.next a')
         if next_page:
-            next_url = urljoin(page_url, next_page['href'])
+            next_url = urljoin(category_url, next_page['href'])
             return get_books_urls(next_url, books_urls)
         else:
             return books_urls
@@ -127,10 +154,18 @@ def scrape_category(url, category):
 
 
 def scrape_website():
+    """
+    Gets links for each category and scrape each of them
+    :return: nothing
+    """
     url = 'http://books.toscrape.com'
 
-    # get categories from the website
     def get_categories(root_url):
+        """
+        Gets categories from the entire website
+        :param root_url: url of the website
+        :return: dictionary, pairs of each category and its url
+        """
         page = requests.get(root_url)
         soup = BeautifulSoup(page.content, 'html.parser')
         # stock category names and urls in a dictionary
