@@ -3,10 +3,10 @@ from urllib.request import urlretrieve
 import os
 import re
 from slugify import slugify
-import csv
 from helper_soup import get_soup
 import helper_table as tab
 import helper_number as num
+from helper_write_csv import write_row
 
 
 def scrape_page(url, image_path, csvfile):
@@ -62,24 +62,11 @@ def scrape_page(url, image_path, csvfile):
     ]
 
     # write data in csv file
-    write_book_data(page_content, csvfile)
-
+    write_row(page_content, csvfile)
     # create image file name
     image_file_name = slugify(title) + '.' + image_url.rsplit('.')[-1]
     # download image
     urlretrieve(image_url, image_path + image_file_name)
-
-
-def write_book_data(list_of_data, csvfile):
-    """
-    Takes a list of metadata and append it to a csv file
-    :param list_of_data: list, metadata of a product
-    :param csvfile: str, path and name of csv where data are written
-    :return: nothing
-    """
-    with open(csvfile, 'a', newline='') as file:
-        writer = csv.writer(file, delimiter=',')
-        writer.writerow(list_of_data)
 
 
 def scrape_category(url, category):
@@ -142,9 +129,7 @@ def scrape_category(url, category):
     if not os.path.exists(image_path):
         os.mkdir(image_path)
     # add headers to category csv file
-    with open(category_csv, 'w', newline='') as file:
-        writer = csv.writer(file, delimiter=',')
-        writer.writerow(headers)
+    write_row(headers, category_csv)
 
     # call scrape_page() for each book in the category
     for book_url in get_books_urls(url, []):
