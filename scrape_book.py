@@ -35,9 +35,10 @@ def scrape_page(url, image_path, csvfile):
     text_available = tab.get_value_from_table(soup, 'Availability')
     number_available = re.findall('[0-9]+', text_available)[0]
     # product_description
-    try:
-        product_description = soup.select('#product_description ~ p')[0].string
-    except:
+    product_description = soup.select('#product_description ~ p')
+    if len(product_description) > 0:
+        product_description = product_description[0].string
+    else:
         product_description = "No Description"
     # category
     category = soup.select('.breadcrumb li a')[2].string
