@@ -1,11 +1,10 @@
-import requests
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from urllib.request import urlretrieve
 import os
 import re
 from slugify import slugify
 import csv
+from helper_soup import get_soup
 import helper_table as tab
 import helper_number as num
 
@@ -18,8 +17,7 @@ def scrape_page(url, image_path, csvfile):
     :param csvfile: str, path and name of csv where metadata are written
     :return: nothing
     """
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, 'html.parser')
+    soup = get_soup(url)
 
     # product_page_url
     product_page_url = url
@@ -99,8 +97,7 @@ def scrape_category(url, category):
         :param books_urls: list(str), accumulator of book urls
         :return: list(str), list of book urls
         """
-        page = requests.get(category_url)
-        soup = BeautifulSoup(page.content, 'html.parser')
+        soup = get_soup(category_url)
         new_books_urls = soup.select('.product_pod>div>a')
 
         def join_url(book):
@@ -167,8 +164,7 @@ def scrape_website():
         :param root_url: url of the website
         :return: dictionary, pairs of each category and its url
         """
-        page = requests.get(root_url)
-        soup = BeautifulSoup(page.content, 'html.parser')
+        soup = get_soup(root_url)
         # stock category names and urls in a dictionary
         categories = {}
         for cat in soup.select('.side_categories ul ul li a'):
