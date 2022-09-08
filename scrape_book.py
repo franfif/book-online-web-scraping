@@ -125,6 +125,7 @@ def scrape_category(url, category):
     image_path = 'books_toscrape/' + category + '_images/'
     if not os.path.exists(image_path):
         os.mkdir(image_path)
+        
     # add headers to category csv file
     write_row(headers, category_csv)
 
@@ -139,7 +140,6 @@ def scrape_website():
     :return: nothing
     """
     url = 'http://books.toscrape.com'
-
     soup = get_soup(url)
     # stock category names and urls in a dictionary
     categories = {}
