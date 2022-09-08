@@ -140,23 +140,16 @@ def scrape_website():
     """
     url = 'http://books.toscrape.com'
 
-    def get_categories(root_url):
-        """
-        Gets categories from the entire website
-        :param root_url: url of the website
-        :return: dictionary, pairs of each category and its url
-        """
-        soup = get_soup(root_url)
-        # stock category names and urls in a dictionary
-        categories = {}
-        for cat in soup.select('.side_categories ul ul li a'):
-            key = cat.string.strip()
-            value = urljoin(root_url, cat.attrs.get('href'))
-            categories[key] = value
-        return categories
+    soup = get_soup(url)
+    # stock category names and urls in a dictionary
+    categories = {}
+    for cat in soup.select('.side_categories ul ul li a'):
+        key = cat.string.strip()
+        value = urljoin(url, cat.attrs.get('href'))
+        categories[key] = value
 
     # call scrape_category() for each category in the website
-    for cat_name, cat_url in get_categories(url).items():
+    for cat_name, cat_url in categories.items():
         scrape_category(cat_url, cat_name)
         # progression information
         print(cat_name + ' is done')
