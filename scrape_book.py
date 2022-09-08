@@ -2,8 +2,8 @@ from urllib.parse import urljoin
 import os
 import re
 from helper_soup import get_soup
-import helper_table as tab
-import helper_number as num
+from helper_table import get_value_from_table
+from helper_number import word_to_number
 from helper_write_csv import write_row
 from helper_image import download_image
 
@@ -21,15 +21,15 @@ def scrape_page(url, image_path, csvfile):
     # product_page_url
     product_page_url = url
     # universal_ product_code (upc)
-    universal_product_code = tab.get_value_from_table(soup, 'UPC')
+    universal_product_code = get_value_from_table(soup, 'UPC')
     # title
     title = soup.h1.string
     # price_including_tax
-    price_including_tax = tab.get_value_from_table(soup, 'Price (incl. tax)')
+    price_including_tax = get_value_from_table(soup, 'Price (incl. tax)')
     # price_excluding_tax
-    price_excluding_tax = tab.get_value_from_table(soup, 'Price (excl. tax)')
+    price_excluding_tax = get_value_from_table(soup, 'Price (excl. tax)')
     # number_available
-    text_available = tab.get_value_from_table(soup, 'Availability')
+    text_available = get_value_from_table(soup, 'Availability')
     number_available = re.findall('[0-9]+', text_available)[0]
     # product_description
     product_description = soup.select('#product_description ~ p')
@@ -41,7 +41,7 @@ def scrape_page(url, image_path, csvfile):
     category = soup.select('.breadcrumb li a')[2].string
     # review_rating
     review_rating = soup.find(class_='star-rating').attrs.get('class')[1]
-    review_rating = num.word_to_number(review_rating)
+    review_rating = word_to_number(review_rating)
     # image_url
     # change relative img src to absolute url
     image_url = urljoin(url, soup.img['src'])
