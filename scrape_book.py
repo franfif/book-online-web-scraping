@@ -1,12 +1,11 @@
 from urllib.parse import urljoin
-from urllib.request import urlretrieve
 import os
 import re
-from slugify import slugify
 from helper_soup import get_soup
 import helper_table as tab
 import helper_number as num
 from helper_write_csv import write_row
+from helper_image import download_image
 
 
 def scrape_page(url, image_path, csvfile):
@@ -63,10 +62,8 @@ def scrape_page(url, image_path, csvfile):
 
     # write data in csv file
     write_row(page_content, csvfile)
-    # create image file name
-    image_file_name = slugify(title) + '.' + image_url.rsplit('.')[-1]
-    # download image
-    urlretrieve(image_url, image_path + image_file_name)
+    # download the book's image
+    download_image(image_url, title, image_path)
 
 
 def scrape_category(url, category):
