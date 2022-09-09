@@ -8,7 +8,7 @@ from helper_write_csv import write_row
 from helper_image import download_image
 
 
-def scrape_page(url, image_path, csvfile):
+def scrape_book(url, image_path, csvfile):
     """
     Reads a product page, writes metadata into cvs and download images
     :param url: str, url to a book page
@@ -125,13 +125,13 @@ def scrape_category(url, category):
     image_path = 'books_toscrape/' + category + '_images/'
     if not os.path.exists(image_path):
         os.mkdir(image_path)
-        
+
     # add headers to category csv file
     write_row(headers, category_csv)
 
     # call scrape_page() for each book in the category
     for book_url in get_books_urls(url, []):
-        scrape_page(book_url, image_path, category_csv)
+        scrape_book(book_url, image_path, category_csv)
 
 
 def scrape_website():
