@@ -18,6 +18,7 @@ It will create:
 - a folder per category containing the image of each book of the category
 
 Before using the application, please install all the packages as stated in [requirements.txt](requirements.txt)
+
 From the terminal, use the command `pip install -r requirements.txt`.
 
 To use the application, run `python3 scrape_book.py`.
