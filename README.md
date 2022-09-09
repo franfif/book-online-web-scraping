@@ -21,7 +21,7 @@ Before using the application, please install all the packages as stated in [requ
 
 From the terminal, use the command `pip install -r requirements.txt`.
 
-To use the application, run `python3 scrape_book.py`.
+To use the application, run `python3 books_toscrape.py`.
 
 Please note:
 
