@@ -1,6 +1,10 @@
 # Extract prices from Books to Scrape
 
+## Application goal
+
 This project allows the user to scrape the website http://books.toscrape.com/ to get sale information about books.
+
+## Result
 
 It will create:
 
@@ -17,13 +21,17 @@ It will create:
     - image_url
 - a folder per category containing the image of each book of the category
 
+## Virtual environment
+
 Before using the application, please install all the packages as stated in [requirements.txt](requirements.txt)
 
 From the terminal, use the command `pip install -r requirements.txt`.
 
+## Run the application
+
 To use the application, run `python3 books_toscrape.py`.
 
-Please note:
+## Please note
 
 - This application only works for http://books.toscrape.com/
 - Any change in the structure of the website by the owner might change the result of the application
